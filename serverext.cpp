@@ -10,7 +10,7 @@ std::string program::GetTime() {
     std::string s(msg);
     return s;
 };
-void program::SocketShutdown(SOCKET sock) {
+void program::SocketShutdown() {
     char msg[SEND_MAX] = "Server disconnected\r\n";
     send(sock, msg, sizeof(msg), 0);
     std::cout << "Client exited manually" << std::endl;

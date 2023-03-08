@@ -8,11 +8,11 @@
 #include<stdio.h>
 #pragma comment(lib, "ws2_32.lib")
 #define SPORT 6969
+program sys;
 const char welcomeMsg[SEND_MAX] = "Welcome To PPY Server!(v0.0.1-Beta)\r\n",
 passwdMsg[SEND_MAX] = "Please enter Password: ",
 passwdErrMsg[SEND_MAX] = "Wrong password! Please try again.\r\n";
 const bool needPasswd = 0;
-program sys;
 int TcpInit() { //initialize WSA
     WSADATA wsaData;
     WORD wsVer = MAKEWORD(2, 2);
@@ -52,6 +52,7 @@ int TcpMain(SOCKET sock) {
         send(sock, welcomeMsg, SEND_MAX, 0);
         connectSuccess = 1;
     }
+    sys.sock = sock;
     while(connectSuccess) {
         char recvData[RECV_MAX];
         memset(&recvData, 0, RECV_MAX);
@@ -66,7 +67,7 @@ int TcpMain(SOCKET sock) {
             cstream >> cmd >> args[0] >> args[1] >> args[2] >> args[3] >> args[4];
             std::cout << "Client sent a command (command: " << cmd <<", arg1: " << args[0] << ", arg2: " << args[1] <<", arg3: " << args[2] << ", arg4: " << args[3] << ", arg5: " << args[4] << ")" << std::endl;
             if(cmd == "exit") {
-                sys.SocketShutdown(sock);
+                sys.SocketShutdown();
                 connectSuccess = 0;
             } else if(cmd == "clear") {
                 system("cls");
@@ -102,12 +103,12 @@ int TcpMain(SOCKET sock) {
 }
 int main() {
     if(TcpInit() != 0) {
-        std::cout << "process 1" << std::endl;
+        std::cout << "process 1: WSA Initializing Failed" << std::endl;
        return -1; 
     }
     SOCKET Lsocket = socket(AF_INET, SOCK_STREAM, 0), Dsocket; //setup listen socket
     if(Lsocket == INVALID_SOCKET) {
-        std::cout << "process 2" << std::endl;
+        std::cout << "process 2: Listening Socket Creating Failed" << std::endl;
         return -2;
     }
     sockaddr_in addr, CAddr;        
@@ -116,11 +117,11 @@ int main() {
     addr.sin_addr.S_un.S_addr = INADDR_ANY;
     addr.sin_port = htons(SPORT);
     if(bind(Lsocket, (sockaddr*)&addr, sizeof(addr)) == SOCKET_ERROR) {
-        std::cout << "process 3" << std::endl;
+        std::cout << "process 3: Address Binding Failed" << std::endl;
         return -3;
     }
     if(listen(Lsocket, SOMAXCONN) == SOCKET_ERROR) {
-        std::cout << "process 4" << std::endl;
+        std::cout << "process 4: Socket Listening Failed" << std::endl;
         return -4;
     }
     std::cout << "Waiting for connection..." << std::endl;
@@ -128,7 +129,7 @@ int main() {
     int addrLen = 16;
     Dsocket = accept(Lsocket, (sockaddr*)&CAddr, &addrLen);
     if(Dsocket == INVALID_SOCKET) {
-        std::cout << "process 5" << std::endl;
+        std::cout << "process 5: Accepting Client Failed" << std::endl;
         return -5;
     }
     std::cout << inet_ntoa(CAddr.sin_addr)  << " connected" << std::endl;

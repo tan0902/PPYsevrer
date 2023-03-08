@@ -11,8 +11,8 @@
 #define HOST_VER "PPY SERVER v0.0.1-Beta"
 class program {
     public:
+        SOCKET sock;
         std::string GetTime();
         std::string GetHostInfo();
-        void SocketShutdown(SOCKET sock);
-    private:
+        void SocketShutdown();
 };
