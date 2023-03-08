@@ -12,8 +12,8 @@
 class program {
     public:
         SOCKET sock;
-        std::string GetTime();
-        std::string GetHostInfo();
+        void GetTime();
+        void GetHostInfo();
         void SocketShutdown();
         void ClearScreen();
 };
