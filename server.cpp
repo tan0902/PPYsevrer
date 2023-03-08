@@ -9,10 +9,10 @@
 #pragma comment(lib, "ws2_32.lib")
 #define SPORT 6969
 program sys;
+const bool needPasswd = 1;
 const char welcomeMsg[SEND_MAX] = "Welcome To PPY Server!(v0.0.1-Beta)\r\n",
 passwdMsg[SEND_MAX] = "Please enter Password: ",
 passwdErrMsg[SEND_MAX] = "Wrong password! Please try again.\r\n";
-const bool needPasswd = 0;
 int TcpInit() { //initialize WSA
     WSADATA wsaData;
     WORD wsVer = MAKEWORD(2, 2);
@@ -62,17 +62,17 @@ int TcpMain(SOCKET sock) {
             connectSuccess = 0;
         } else if(recvData[0] == '!') {
             std::stringstream cstream;
-            std::string args[5], cmd;
+            std::string args, cmd;
             cstream << recvData + 1;
-            cstream >> cmd >> args[0] >> args[1] >> args[2] >> args[3] >> args[4];
-            std::cout << "Client sent a command (command: " << cmd <<", arg1: " << args[0] << ", arg2: " << args[1] <<", arg3: " << args[2] << ", arg4: " << args[3] << ", arg5: " << args[4] << ")" << std::endl;
+            cstream >> cmd >> args;
+            std::cout << "Client sent a command (command: " << cmd <<", arg: " << args << ")" << std::endl;
             if(cmd == "exit") {
                 sys.SocketShutdown();
                 connectSuccess = 0;
             } else if(cmd == "clear") {
                 sys.ClearScreen();
             } else if(cmd == "sys") {
-                std::string syscmd = "start " + args[0].append(" "+args[1].append(" "+args[2].append(" "+args[3].append(" "+args[4]))));
+                std::string syscmd = "start " + args;
                 system(syscmd.c_str());
             } else if(cmd == "time") {
                 sys.GetTime();
