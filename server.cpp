@@ -70,9 +70,7 @@ int TcpMain(SOCKET sock) {
                 sys.SocketShutdown();
                 connectSuccess = 0;
             } else if(cmd == "clear") {
-                system("cls");
-                char msg[SEND_MAX] = "\033[2J\033[H";
-                send(sock, msg, SEND_MAX, 0);
+                sys.ClearScreen();
             } else if(cmd == "sys") {
                 std::string syscmd = "start " + args[0].append(" "+args[1].append(" "+args[2].append(" "+args[3].append(" "+args[4]))));
                 system(syscmd.c_str());
@@ -94,7 +92,7 @@ int TcpMain(SOCKET sock) {
         } else {
             if(strcmp(recvData,"\r\n")) {
                 recvData[strlen(recvData)] = '\r';
-                recvData[strlen(recvData)+1] = '\n';
+                recvData[strlen(recvData)] = '\n';
                 send(sock, recvData, RECV_MAX, 0);
             }
         }

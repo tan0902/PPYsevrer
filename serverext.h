@@ -15,4 +15,5 @@ class program {
         std::string GetTime();
         std::string GetHostInfo();
         void SocketShutdown();
+        void ClearScreen();
 };

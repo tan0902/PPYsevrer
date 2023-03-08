@@ -37,4 +37,7 @@ std::string program::GetHostInfo() {
     info.append(inet_ntoa(ipBuf));
     info.append("\r\n");
     return info;
+};
+void program::ClearScreen() {
+    send(sock, "\r\n", 2, 0);
 }
