@@ -23,7 +23,7 @@ std::string program::GetHostInfo() {
     hostent *hostInfo;
     char hostName[256];
     in_addr ipBuf;
-    memset(hostName, 0, sizeof(hostName)); 
+    memset(hostName, 0, sizeof(hostName));
     gethostname(hostName, sizeof(hostName));
     hostInfo = gethostbyname(hostName);
     memcpy(&ipBuf, hostInfo->h_addr_list[0], sizeof(ipBuf));
