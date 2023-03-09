@@ -9,7 +9,7 @@
 #pragma comment(lib, "ws2_32.lib")
 #define SPORT 6969
 program sys;
-bool needPasswd = 0;
+bool needPasswd = 1;
 const char welcomeMsg[SEND_MAX] = "Welcome To PPY Server!(v0.0.1-Beta)\r\n",
 passwdMsg[SEND_MAX] = "Please enter Password: ",
 passwdErrMsg[SEND_MAX] = "Wrong password! Please try again.\r\n";
@@ -94,8 +94,8 @@ int TcpMain(SOCKET sock) {
     return WSAGetLastError();
 };
 int main(int argc, char *argv[]) {
-    if(!strcmp(argv[0], "enable-password")) {
-        needPasswd = 1;
+    if(!strcmp(argv[argc-1], "disable-password")) {
+        needPasswd = 0;
     }
     if(TcpInit() != 0) {
         std::cout << "process 1: WSA Initializing Failed" << std::endl;
@@ -120,6 +120,7 @@ int main(int argc, char *argv[]) {
         return -4;
     }
     std::cout << "Waiting for connection..." << std::endl;
+    if(!needPasswd) {std::cout << "(Password disabled)" << std::endl;};
     memset(&CAddr, 0, sizeof(CAddr));
     int addrLen = 16;
     Dsocket = accept(Lsocket, (sockaddr*)&CAddr, &addrLen);
