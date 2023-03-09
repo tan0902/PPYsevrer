@@ -9,7 +9,7 @@
 #pragma comment(lib, "ws2_32.lib")
 #define SPORT 6969
 program sys;
-const bool needPasswd = 1;
+bool needPasswd = 0;
 const char welcomeMsg[SEND_MAX] = "Welcome To PPY Server!(v0.0.1-Beta)\r\n",
 passwdMsg[SEND_MAX] = "Please enter Password: ",
 passwdErrMsg[SEND_MAX] = "Wrong password! Please try again.\r\n";
@@ -46,7 +46,7 @@ int TcpMain(SOCKET sock) {
                 send(sock, passwdErrMsg, SEND_MAX, 0);
                 std::cout << "Client sent a wrong password: " << passwd_in << std::endl;
             }
-        } 
+        }
     }
     if(!needPasswd) {
         send(sock, welcomeMsg, SEND_MAX, 0);
@@ -92,8 +92,11 @@ int TcpMain(SOCKET sock) {
         }
     }
     return WSAGetLastError();
-}
-int main() {
+};
+int main(int argc, char *argv[]) {
+    if(!strcmp(argv[0], "enable-password")) {
+        needPasswd = 1;
+    }
     if(TcpInit() != 0) {
         std::cout << "process 1: WSA Initializing Failed" << std::endl;
        return -1; 
